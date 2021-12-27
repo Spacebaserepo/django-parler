@@ -1012,8 +1012,9 @@ class TranslatedFieldsModelMixin:
 
     def _get_field_values(self):
         # Use the new Model._meta API.
+        import copy  # This allows using non-immutable values for fields (eg. JSON)
         return [
-            getattr(self, field.get_attname())
+            copy.deepcopy(getattr(self, field.get_attname()))
             for field in self._meta.get_fields()
             if not field.is_relation or field.many_to_one
         ]
