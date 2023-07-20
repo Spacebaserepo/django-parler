@@ -273,7 +273,10 @@ class TranslatableModelFormMetaclass(ModelFormMetaclass):
                     error_messages = (
                         getattr(form_new_meta, "error_messages", form_meta.error_messages) or ()
                     )
-                    formfield_callback = attrs.get("formfield_callback", None)
+
+                    # Django 4.2 changes the way formfield_callback is handled so it's no longer available outside Meta
+                    formfield_callback = (attrs.get("formfield_callback", None) 
+                                          or getattr(form_new_meta, "formfield_callback", None))
 
                     if fields == "__all__":
                         fields = None
